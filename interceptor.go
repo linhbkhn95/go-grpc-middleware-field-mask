@@ -3,10 +3,15 @@ package interceptor
 import (
 	"context"
 
+	"github.com/mennanov/fmutils"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/fieldmaskpb"
 )
+
+var DefaultFilterFunc FilterFunc = func(msg proto.Message, paths []string) {
+	fmutils.Filter(msg, paths)
+}
 
 type FilterFunc func(msg proto.Message, paths []string)
 

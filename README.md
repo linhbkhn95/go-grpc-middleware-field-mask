@@ -22,7 +22,7 @@ import(
 
 func main(){
     var unaryOpts []grpc.UnaryServerInterceptor{
-		fieldmaskpkg.UnaryServerInterceptor(fmutils.Filter),
+		fieldmaskpkg.UnaryServerInterceptor(fieldmaskpkg.DefaultFilterFunc),
     }
     // Should append others interceptors
 }
