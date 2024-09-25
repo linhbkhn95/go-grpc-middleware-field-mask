@@ -14,13 +14,15 @@ import(
         // ...
         "google.golang.org/grpc"
     	fieldmaskpkg "github.com/linhbkhn95/go-grpc-middleware-field-mask"
+        "github.com/mennanov/fmutils"
+
 
 )
 // ...
 
 func main(){
     var unaryOpts []grpc.UnaryServerInterceptor{
-		fieldmaskpkg.UnaryServerInterceptor(),
+		fieldmaskpkg.UnaryServerInterceptor(fmutils.Filter),
     }
     // Should append others interceptors
 }
