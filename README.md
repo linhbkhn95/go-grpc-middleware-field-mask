@@ -2,6 +2,16 @@
 Go grpc middleware for field mask
 
 # How to use
+`Pre-condition`
+
+You have to add `field_mask` into proto's request like
+``` Protobuf
+message Request{
+  // main fields
+  google.protobuf.FieldMask field_mask = 100;
+}
+
+```
 1. install via go get 
 
  `go get github.com/linhbkhn95/go-grpc-middleware-field-mask`
