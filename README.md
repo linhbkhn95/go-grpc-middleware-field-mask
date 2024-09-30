@@ -1,5 +1,6 @@
 # go-grpc-middleware-field-mask
 Go grpc middleware for field mask
+This package provides an interceptor that will `filter` server response by client intention.
 
 # How to use
 `Pre-condition`
