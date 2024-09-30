@@ -36,3 +36,41 @@ func main(){
     // Should append others interceptors
 }
 ```
+3. Client usage
+   	
+	 `Protobuf definition`
+	 ```Protobuf
+	   message GetProductRequest{
+	     string id = 1;
+	     google.protobuf.FieldMask field_mask = 2;
+	   }
+	   message Response{
+	     message Result{
+	        repeated Product products = 1;
+	     }
+	     Result result = 1;
+	   }
+	   message Price{
+	      string id = 1;
+	      string name = 2;
+	      string img = 3;
+	      decimal price = 4;
+	   }
+	   
+ 	```
+
+	Client interaction
+
+	 ``` Go
+         func GetProduct(id string) *Product{
+		  request := pb.GetProductRequest{
+			Id: "axaxaxx",
+			FieldMask: &fieldmaskpb.FieldMask{
+				Paths: []string{
+					"result.products.id", "result.products.name"
+				},
+			}
+		   }
+           // ...
+         }
+	 ```
