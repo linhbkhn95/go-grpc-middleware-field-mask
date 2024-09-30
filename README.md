@@ -50,7 +50,7 @@ func main(){
 	     }
 	     Result result = 1;
 	   }
-	   message Price{
+	   message Product{
 	      string id = 1;
 	      string name = 2;
 	      string img = 3;
