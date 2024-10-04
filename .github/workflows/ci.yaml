@@ -1,0 +1,93 @@
+name: Checking
+concurrency: 
+  group: ci-workflow-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+permissions: write-all
+
+env:
+  GO_VERSION: 1.21
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  golangci-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: lint
+        uses: golangci/golangci-lint-action@v3.1.0
+        with:
+          version: latest
+          # skip cache because of flaky behaviors
+          skip-build-cache: true
+          skip-pkg-cache: true
+  test:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }} # The Go version to download (if necessary) and use.
+
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Vet
+        run: go vet -v ./...
+      - name: Run test
+        run: make test
+  check-proto-lint:
+    name: Run proto lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # Install the `buf` CLI
+      - uses: bufbuild/buf-setup-action@v1
+      - uses: bufbuild/buf-lint-action@v1
+      - name: Fetching base branch
+        run: |
+          git fetch -u origin ${{ github.base_ref }}:${{ github.base_ref }}
+      - name: Running linter, checking breaking changes
+        run: |
+          buf lint
+
+  check-generate:
+    runs-on: ubuntu-latest
+   
+    needs:
+      - check-proto-lint
+      - test
+      - golangci-lint
+    
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: Checkout
+        uses: actions/checkout@v4
+      # Install the `buf` CLI
+      - uses: bufbuild/buf-setup-action@v1
+        with:
+          version: "latest"
+      - name: Install protoc
+        run: |
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+          go install github.com/golang/protobuf/protoc-gen-go@latest
+          export GOROOT=/usr/local/go
+          export GOPATH=$HOME/go
+          export GOBIN=$GOPATH/bin
+          export PATH=$PATH:$GOROOT:$GOPATH:$GOBIN
+      - name: generate proto
+        run: make generate-proto

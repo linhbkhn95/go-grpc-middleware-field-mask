@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package discovery.v1;
+import "google/protobuf/field_mask.proto";
+
+option go_package = "github.com/linhbkhn95/go-grpc-middleware-field-mask/go/discovery/v1";
+
+
+// DiscoveryService ...
+service DiscoveryService {
+  // ListProducts ...
+  rpc ListProducts (ListProductsRequest) returns (ListProductsResponse) {}
+}
+
+// ListProductsRequest ...
+message ListProductsRequest{
+  string id = 1;
+  string key_search = 2;
+  google.protobuf.FieldMask field_mask = 3;
+}
+
+// GetProductResponse ...
+message ListProductsResponse {
+  ListProductsResult result = 1;
+}
+
+// ListProductsResult ...
+message ListProductsResult{
+  repeated Product products = 1;
+  // Pagination
+}
+
+// Product ...
+message Product{
+  string id = 1;
+  string name = 2;
+  string img = 3;
+  double price = 4;
+  Shop shop = 5;
+}
+
+// Shop ...
+message Shop{
+  string id = 1;
+  string name = 2;
+  string img = 3;
+}
