@@ -41,7 +41,7 @@ func main(){
    	
 	 `Protobuf definition`
 	 ```Protobuf
-	   message GetProductRequest{
+	   message ListProductsRequest{
 	     string id = 1;
 	     google.protobuf.FieldMask field_mask = 2;
 	   }
@@ -63,7 +63,7 @@ func main(){
 	Client interaction
 
 	 ``` Go
-         func GetProduct(id string) *Product{
+         func GetProducts() *Product{
 		  request := pb.GetProductRequest{
 			Id: "axaxaxx",
 			FieldMask: &fieldmaskpb.FieldMask{
