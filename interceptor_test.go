@@ -7,11 +7,12 @@ import (
 	"context"
 	"testing"
 
-	discoveryv1 "github.com/linhbkhn95/go-grpc-middleware-field-mask/pb/go/discovery/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/fieldmaskpb"
+
+	discoveryv1 "github.com/linhbkhn95/go-grpc-middleware-field-mask/pb/go/discovery/v1"
 )
 
 func TestFieldMaskSuite(t *testing.T) {
